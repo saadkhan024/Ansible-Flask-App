@@ -2,22 +2,39 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Clone Repo') {
             steps {
-                checkout scm
+                git branch: 'main', url: ''
             }
         }
 
-        stage('Install Ansible (if needed)') {
+        stage('Install Dependencies') {
             steps {
                 sh '''
-                if ! command -v ansible >/dev/null 2>&1; then
-                  sudo apt update
-                  sudo apt install -y ansible python3-pip
-                fi
+                sudo apt update
+                sudo apt install -y ansible python3 python3-pip
                 '''
             }
         }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                sh '''
+                ansible-playbook -i inventory site.yml
+                '''
+            }
+        }
+
+        stage('Restart Services') {
+            steps {
+                sh '''
+                sudo systemctl restart nginx
+                '''
+            }
+        }
+    }
+}
+
 
         stage('Deploy with Ansible') {
             steps {
