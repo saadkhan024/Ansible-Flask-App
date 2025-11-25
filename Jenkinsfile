@@ -6,7 +6,7 @@ pipeline {
     GIT_BRANCH = 'main'               // <-- change if your branch is different
     INVENTORY = 'inventory.ini'       // <-- change to 'inventory' if that's the file in your repo
     PLAYBOOK  = 'site.yml'            // <-- change if your playbook filename is different
-    TARGET    = 'node'                // <-- inventory group or host to limit to, optional
+    TARGET    = 'appservers'                // <-- inventory group or host to limit to, optional
     ANSIBLE_CMD_OPTS = '-vv'
     FLASK_HEALTH = 'http://http://13.234.75.176/health' // <-- change to your Flask app URL/IP
   }
