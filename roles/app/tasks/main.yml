@@ -1,0 +1,44 @@
+---
+- name: Ensure app user exists
+  user:
+    name: "{{ app_user }}"
+    shell: /bin/bash
+    create_home: yes
+
+- name: Install Python
+  apt:
+    name:
+      - python3
+    state: present
+    update_cache: yes
+
+- name: Install Flask (via apt)
+  apt:
+    name: python3-flask
+    state: present
+
+- name: Create app directory
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: "0755"
+
+- name: Copy Flask app
+  copy:
+    src: app.py
+    dest: "{{ app_dir }}/app.py"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: "0644"
+  notify: restart app
+
+- name: Deploy systemd service
+  template:
+    src: myapp.service.j2
+    dest: /etc/systemd/system/myapp.service
+  notify:
+    - daemon reload
+    - restart app
+

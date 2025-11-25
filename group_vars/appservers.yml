@@ -1,0 +1,4 @@
+app_user: appuser
+app_dir: /opt/myapp
+app_port: 5000
+

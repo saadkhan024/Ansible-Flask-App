@@ -1,0 +1,9 @@
+---
+- name: Deploy Flask app with Nginx
+  hosts: appservers
+  become: yes
+
+  roles:
+    - app
+    - web
+
